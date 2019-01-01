@@ -1,0 +1,3 @@
+rootProject.name = 'toaroonApp'
+
+include ':app'
