@@ -2,15 +2,16 @@ import React, { Component } from 'react';
 import { Text, View, Image, TouchableOpacity, StyleSheet, PixelRatio } from 'react-native';
 
 // var base64ImageUri = 'data:image/png;base64,' + contact.thumbnailImageData;
+const nopicture = require('../assets/icons/nopicture.png');
 
 class ContactItem extends Component {
   render() {
     const { contact, onPress } = this.props;
-    const image = !contact.imageDataAvailable ? 'https://via.placeholder.com/350x150' : `data:image/png;base64,${contact.thumbnailImageData}`;
+    const image = !contact.imageDataAvailable ? nopicture : { uri: `data:image/png;base64,${contact.thumbnailImageData}` };
     return (
       <TouchableOpacity onPress={onPress(contact)}>
         <View style={styles.item}>
-          <Image source={{ uri: image }} style={styles.image} />
+          <Image source={image} style={styles.image} />
           <View style={styles.details}>
             <Text style={styles.text}>{contact.fullName}</Text>
             <Text style={styles.phone}>{contact.phoneNumbers ? contact.phoneNumbers[0].stringValue : ''}</Text>

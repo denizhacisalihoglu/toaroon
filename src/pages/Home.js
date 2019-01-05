@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, ScrollView, View, Modal, AsyncStorage, Text, Alert, Linking } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, View, Modal, AsyncStorage, Text, Alert, Linking, TouchableOpacity } from 'react-native';
 
 
 import Hamburger from '../components/Hamburger';
@@ -8,13 +8,9 @@ import Item from '../components/CircleItem';
 import ContactsPage from './ContactsPage';
 
 type Props = {};
+const nopicture = require('../assets/icons/nopicture.png');
 
 export default class App extends Component<Props> {
-  static navigationOptions = ({
-    headerLeft: (<Hamburger />),
-    headerTitle: <Text style={{ fontWeight: '500', fontSize: 18 }}>Toaroon</Text>,
-    headerRight: (<MenuAdd onPress={() => this.contactModal(true)} />),
-  });
   constructor(props) {
     super(props);
     this.state = {
@@ -31,7 +27,7 @@ export default class App extends Component<Props> {
     (async () => {
       try {
         const { fullName, phoneNumbers, identifier } = contact;
-        const image = !contact.imageDataAvailable ? 'https://via.placeholder.com/350x150' : `data:image/png;base64,${contact.thumbnailImageData}`;
+        const image = !contact.imageDataAvailable ? '' : `data:image/png;base64,${contact.thumbnailImageData}`;
         const user = { fullName, phoneNumbers, identifier, image };
         const contactList = JSON.parse(await AsyncStorage.getItem('contacts')) || [];
         await AsyncStorage.setItem('contacts', JSON.stringify([...contactList, user]));
@@ -52,23 +48,15 @@ export default class App extends Component<Props> {
   }
   toggleDelete = () => this.setState(prev => ({ deleteAvailable: !prev.deleteAvailable }))
   callContact = (contact) => {
-    Alert.alert(
-      `${contact.fullName}`,
-      `\n${contact.phoneNumbers[0].stringValue}`,
-      [
-        { text: 'Cancel', onPress: () => console.info('Call was cancelled.') },
-        { text: 'CALL', onPress: () => Linking.openURL(`tel:${contact.phoneNumbers[0].stringValue}`) },
-      ],
-      { cancelable: false }
-    );
+    Linking.openURL(`tel:${contact.phoneNumbers[0].stringValue}`).catch(err => console.error('An error occurred', err));
   };
   deleteContact = (contact) => {
     Alert.alert(
-      'You are deleting the following call shortcut. Are you sure?',
+      'DELETE',
       `${contact.fullName} `,
       [
         { text: 'Cancel', onPress: () => console.info('Deletion was cancelled.') },
-        { text: 'DELETE', onPress: () => this.deletePermanent(contact) },
+        { text: 'Delete', onPress: () => this.deletePermanent(contact) },
       ],
       { cancelable: false }
     );
@@ -92,6 +80,15 @@ export default class App extends Component<Props> {
       <View
         style={styles.page}
       >
+        <View style={styles.header}>
+          <View style={styles.left}>
+            <Hamburger />
+          </View>
+          <Text style={styles.title}>Toaroon</Text>
+          <TouchableOpacity style={styles.right}>
+            <MenuAdd onPress={this.contactModal(true)} />
+          </TouchableOpacity>
+        </View>
         <ScrollView>
           <View style={styles.wrapper}>
             {
@@ -125,10 +122,6 @@ export default class App extends Component<Props> {
 
 const { width, height } = Dimensions.get('window');
 const styles = StyleSheet.create({
-  headerTitle: {
-    fontWeight: '500',
-    fontSize: 14
-  },
   page: {
     flex: 1,
     width,
@@ -153,5 +146,31 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontWeight: '500',
     color: '#101010'
+  },
+  header: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    backgroundColor: '#fff',
+    top: 0,
+    paddingTop: 50,
+    paddingBottom: 10
+  },
+  left: {
+    flex: 1,
+    alignItems: 'flex-start'
+  },
+  title: {
+    textAlign: 'center',
+    fontWeight: '500',
+    fontSize: 18,
+    display: 'flex',
+    flex: 4,
+  },
+  right: {
+    flex: 1,
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'flex-end',
   }
 });

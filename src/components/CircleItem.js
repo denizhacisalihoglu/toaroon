@@ -44,6 +44,7 @@ const styles = StyleSheet.create({
 const activeIcon = require('../assets/icons/ic_add_black.png');
 const nonActiveIcon = require('../assets/icons/ic_add_black.png');
 const deleteIcon = require('../assets/icons/ic_remove_gray.png');
+const nopicture = require('../assets/icons/nopicture.png');
 
 type Props = {};
 class Item extends Component<Props> {
@@ -56,7 +57,7 @@ class Item extends Component<Props> {
     const icon = this.props.active ? activeIcon : nonActiveIcon;
     const { contact = false, onLongPress, deleteAvailable } = this.props;
     const { deleteAction } = this.state;
-    const image = contact.image ? { uri: contact.image } : icon;
+    const image = contact.image ? { uri: contact.image } : nopicture;
     const deleteContact = (contact) => () => {
       this.props.onDeletePress(contact);
     };
@@ -77,7 +78,7 @@ class Item extends Component<Props> {
           onLongPress={onLongPress}
         >
           <View style={styles.imageContainer}>
-            <Image source={image} style={contact.image ? styles.image : styles.icon} />
+            <Image source={contact ? image : activeIcon} style={contact.image ? styles.image : styles.icon} />
           </View>
         </TouchableHighlight>
       </View>

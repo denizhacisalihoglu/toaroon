@@ -17,7 +17,10 @@ const App = createStackNavigator({
     About: {
         screen: About
     }
-});
+},
+    {
+        headerMode: 'none'
+    });
 
 const Drawer = createDrawerNavigator({
     HomePage: {
