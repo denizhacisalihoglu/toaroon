@@ -33,7 +33,12 @@ public class MainApplication extends Application implements ReactApplication {
       return "index";
     }
   };
-
+  @Override
+    protected List<ReactPackage> getPackages() {
+      return Arrays.<ReactPackage>asList(
+              new MainReactPackage(),
+              new ReactNativeContacts()); // <------ add this
+    }
   @Override
   public ReactNativeHost getReactNativeHost() {
     return mReactNativeHost;

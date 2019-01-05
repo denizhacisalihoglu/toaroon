@@ -8,6 +8,8 @@
   },
   "extends": "rallycoding",
   "rules": {
-      "semi": 2
+      "semi": 2,
+      "max-len": 0,
+      "global-require": "off"
   }
 }
