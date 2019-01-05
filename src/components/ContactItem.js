@@ -13,7 +13,7 @@ class ContactItem extends Component {
           <Image source={{ uri: image }} style={styles.image} />
           <View style={styles.details}>
             <Text style={styles.text}>{contact.fullName}</Text>
-            <Text style={styles.phone}>{contact.phoneNumbers[0].stringValue}</Text>
+            <Text style={styles.phone}>{contact.phoneNumbers ? contact.phoneNumbers[0].stringValue : ''}</Text>
           </View>
         </View>
       </TouchableOpacity>

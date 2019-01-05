@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Alert, AsyncStorage } from 'react-native';
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity, Alert, AsyncStorage, FlatList } from 'react-native';
 import Contacts from 'react-native-unified-contacts';
 import ContactItem from '../components/ContactItem';
 
@@ -52,9 +52,10 @@ class ContactsPage extends Component {
             <Text>empty</Text>
           </View>
           :
-          contactList.map(contact => (
-            <ContactItem key={contact.identifier} contact={contact} onPress={onSelect} />
-          ))
+          <FlatList
+            data={contactList}
+            renderItem={({ item: contact }) => <ContactItem key={contact.identifier} contact={contact} onPress={onSelect} />}
+          />
         }
       </ScrollView>
     );
