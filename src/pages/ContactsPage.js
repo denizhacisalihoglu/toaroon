@@ -14,9 +14,7 @@ class ContactsPage extends Component {
           if (error) {
             console.error(error);
           } else {
-            console.log(contacts);
             const contactList = JSON.parse(await AsyncStorage.getItem('contacts')) || [];
-            console.log(contactList);
             const filter = contactList.map(contact => contact.identifier);
             this.setState({
               contactList: [...contacts.filter(c => filter.indexOf(c.identifier) < 0)]
