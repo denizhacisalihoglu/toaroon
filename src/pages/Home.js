@@ -77,8 +77,9 @@ export default class App extends Component<Props> {
   render() {
     const { contactList, deleteAvailable } = this.state;
     return (
-      <TouchableHighlight
+      <TouchableOpacity
         underlayColor={'rgba(247,247,247,1)'}
+        activeOpacity={1}
         style={styles.page}
         onPress={deleteAvailable && this.toggleDelete}
       >
@@ -119,7 +120,7 @@ export default class App extends Component<Props> {
             <ContactsPage onSelect={this.onSelect} onClose={this.contactModal(false)} />
           </Modal>
         </View>
-      </TouchableHighlight>
+      </TouchableOpacity>
 
     );
   }
