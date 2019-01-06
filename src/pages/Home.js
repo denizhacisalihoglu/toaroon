@@ -81,7 +81,7 @@ export default class App extends Component<Props> {
         underlayColor={'rgba(247,247,247,1)'}
         activeOpacity={1}
         style={styles.page}
-        onPress={deleteAvailable && this.toggleDelete}
+        onPress={deleteAvailable ? this.toggleDelete : null}
       >
         <View style={styles.page}>
           <View style={styles.header}>
@@ -133,7 +133,6 @@ const styles = StyleSheet.create({
     width,
     height,
     backgroundColor: '#F7F7F7',
-    // padding: width * .02
   },
   center: {
     flexGrow: 1,
