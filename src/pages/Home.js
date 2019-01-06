@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Dimensions, ScrollView, View, Modal, AsyncStorage, Text, Alert, Linking, TouchableOpacity } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, View, Modal, AsyncStorage, Text, Alert, Linking, TouchableOpacity, TouchableHighlight } from 'react-native';
 
 
 import Hamburger from '../components/Hamburger';
@@ -77,45 +77,50 @@ export default class App extends Component<Props> {
   render() {
     const { contactList, deleteAvailable } = this.state;
     return (
-      <View
+      <TouchableHighlight
+        underlayColor={'rgba(247,247,247,1)'}
         style={styles.page}
+        onPress={deleteAvailable && this.toggleDelete}
       >
-        <View style={styles.header}>
-          <View style={styles.left}>
-            <Hamburger />
+        <View style={styles.page}>
+          <View style={styles.header}>
+            <View style={styles.left}>
+              <Hamburger />
+            </View>
+            <Text style={styles.title}>Toaroon</Text>
+            <TouchableOpacity style={styles.right}>
+              <MenuAdd onPress={this.contactModal(true)} />
+            </TouchableOpacity>
           </View>
-          <Text style={styles.title}>Toaroon</Text>
-          <TouchableOpacity style={styles.right}>
-            <MenuAdd onPress={this.contactModal(true)} />
-          </TouchableOpacity>
+          <ScrollView>
+            <View style={styles.wrapper}>
+              {
+                contactList.length < 1 ?
+                  <Item onPress={this.contactModal(true)} />
+                  :
+                  contactList.map(contact => (
+                    <Item
+                      contact={contact}
+                      key={contact.identifier}
+                      onDeletePress={this.deleteContact}
+                      onPress={this.callContact}
+                      onLongPress={this.toggleDelete}
+                      deleteAvailable={deleteAvailable}
+                    />
+                  ))
+              }
+            </View>
+          </ScrollView>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.modalVisible}
+          >
+            <ContactsPage onSelect={this.onSelect} onClose={this.contactModal(false)} />
+          </Modal>
         </View>
-        <ScrollView>
-          <View style={styles.wrapper}>
-            {
-              contactList.length < 1 ?
-                <Item onPress={this.contactModal(true)} />
-                :
-                contactList.map(contact => (
-                  <Item
-                    contact={contact}
-                    key={contact.identifier}
-                    onDeletePress={this.deleteContact}
-                    onPress={this.callContact}
-                    onLongPress={this.toggleDelete}
-                    deleteAvailable={deleteAvailable}
-                  />
-                ))
-            }
-          </View>
-        </ScrollView>
-        <Modal
-          animationType="slide"
-          transparent={false}
-          visible={this.state.modalVisible}
-        >
-          <ContactsPage onSelect={this.onSelect} onClose={this.contactModal(false)} />
-        </Modal>
-      </View>
+      </TouchableHighlight>
+
     );
   }
 }
@@ -127,7 +132,7 @@ const styles = StyleSheet.create({
     width,
     height,
     backgroundColor: '#F7F7F7',
-    padding: width * .02
+    // padding: width * .02
   },
   center: {
     flexGrow: 1,
@@ -138,7 +143,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 15,
     flexDirection: 'row',
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
+    padding: width * .02
   },
   welcome: {
     fontSize: 20,
