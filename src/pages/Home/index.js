@@ -10,6 +10,7 @@ import {
 } from '../../components';
 
 import ContactsPage from '../Contacts';
+import AddPhoto from '../AddPhoto';
 
 const { page, wrapper, header, left, title, right } = styles;
 
@@ -20,6 +21,7 @@ export default class App extends Component<Props> {
     super(props);
     this.state = {
       modalVisible: false,
+      photoModalVisible: false,
       contactList: [],
       deleteAvailable: false
     };
@@ -28,6 +30,9 @@ export default class App extends Component<Props> {
   onSelect = (contact) => () => {
     this.setState({
       modalVisible: false
+    });
+    this.setState({
+      photoModalVisible: true
     });
     (async () => {
       try {
@@ -50,6 +55,9 @@ export default class App extends Component<Props> {
   }
   contactModal = (visibility) => () => {
     this.setState({ modalVisible: visibility });
+  }
+  photoModal = (visibility) => () => {
+    this.setState({ photoModalVisible: visibility });
   }
   toggleDelete = () => this.setState(prev => ({ deleteAvailable: !prev.deleteAvailable }))
   callContact = (contact) => {
@@ -127,6 +135,13 @@ export default class App extends Component<Props> {
             visible={this.state.modalVisible}
           >
             <ContactsPage onSelect={this.onSelect} onClose={this.contactModal(false)} />
+          </Modal>
+          <Modal
+            animationType="slide"
+            transparent={false}
+            visible={this.state.photoModalVisible}
+          >
+            <AddPhoto onSelect={this.onSelect} onClose={this.photoModal(false)} />
           </Modal>
         </View>
       </TouchableOpacity>
